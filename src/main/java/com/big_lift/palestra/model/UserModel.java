@@ -12,7 +12,7 @@ import lombok.Setter;
 
 
 @Entity
-@Table(name = "USER")
+@Table(name = "UserModel")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
