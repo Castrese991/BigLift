@@ -2,7 +2,9 @@ package com.big_lift.palestra.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,5 +37,13 @@ public class UserController {
 	public UserModel createUser(@RequestBody UserModel userModel){
 		return userRepository.save(userModel);
 	}
+
+	@DeleteMapping("/{id}")
+	@Operation(summary = "Elimina un utente", description = "Elimina un utente definitivamente dal sistema")
+	public void deleteUser(@PathVariable Long id){userRepository.deleteById(id);}
+
+	@PostMapping("/update")
+	@Operation(summary = "Modifica un utente", description = "Aggiorna un utente esistente")
+	public UserModel updateUser(@RequestBody UserModel userModel){return userRepository.save(userModel);}
 
 }
