@@ -1,6 +1,7 @@
 package com.big_lift.palestra.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,5 +46,9 @@ public class UserController {
 	@PostMapping("/update")
 	@Operation(summary = "Modifica un utente", description = "Aggiorna un utente esistente")
 	public UserModel updateUser(@RequestBody UserModel userModel){return userRepository.save(userModel);}
+
+	@GetMapping("/findUser/{id}")
+	@Operation(summary = "Modifica un utente", description = "Aggiorna un utente esistente")
+	public Optional<UserModel> findUser(@PathVariable Long id){return userRepository.findById(id);}
 
 }
