@@ -34,18 +34,19 @@ public class SecurityConfig
 		return new InMemoryUserDetailsManager(userDetails);
 	}
 
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers("/swagger-ui/**", "/v3/api-docs*/**");
-	}
+//	@Bean
+//	public WebSecurityCustomizer webSecurityCustomizer() {
+//		return (web) -> web.ignoring().requestMatchers("/swagger-ui/**", "/v3/api-docs*/**");
+//	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 				.authorizeRequests()
-				.anyRequest().authenticated()
+				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").authenticated() // Richiedi autenticazione per Swagger
+				.anyRequest().authenticated() // Richiedi autenticazione per tutto
 				.and()
-				.httpBasic();
+				.httpBasic(); // Usa autenticazione HTTP Basic
 		return http.build();
 	}
 }

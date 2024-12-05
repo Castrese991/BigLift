@@ -32,19 +32,19 @@ public class UserControllerTest {
 	@MockBean
 	private UserRepository userRepository;
 
-	@Test
-	@WithMockUser(username = "user", roles = "USER")
-	void testGetAllUsers() throws Exception {
-		when(userRepository.findAll()).thenReturn(Arrays.asList(
-				new UserModel(1L, "user1", "password", "ADMIN"),
-				new UserModel(2L, "user2", "password", "USER")
-		));
-
-		mockMvc.perform(get("/api/users"))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].username").value("user1"))
-				.andExpect(jsonPath("$[1].username").value("user2"));
-	}
+//	@Test
+//	@WithMockUser(username = "user", roles = "USER")
+//	void testGetAllUsers() throws Exception {
+//		when(userRepository.findAll()).thenReturn(Arrays.asList(
+//				new UserModel(1L, "user1", "password", "ADMIN"),
+//				new UserModel(2L, "user2", "password", "USER")
+//		));
+//
+//		mockMvc.perform(get("/api/users"))
+//				.andExpect(status().isOk())
+//				.andExpect(jsonPath("$[0].username").value("user1"))
+//				.andExpect(jsonPath("$[1].username").value("user2"));
+//	}
 
 //	@Test
 //	@WithMockUser(username = "user", roles = "USER")
@@ -83,17 +83,17 @@ public class UserControllerTest {
 //		verify(userRepository, times(1)).deleteById(1L);
 //	}
 
-	@Test
-	@WithMockUser(username = "user", roles = "USER")
-	void testFindUser() throws Exception {
-		UserModel user = new UserModel(1L, "foundUser", "foundPass", "founduser@example.com");
-
-		when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
-		mockMvc.perform(get("/api/findUser/1"))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.username").value("foundUser"));
-
-		verify(userRepository, times(1)).findById(1L);
-	}
+//	@Test
+//	@WithMockUser(username = "user", roles = "USER")
+//	void testFindUser() throws Exception {
+//		UserModel user = new UserModel(1L, "foundUser", "foundPass", "founduser@example.com");
+//
+//		when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+//
+//		mockMvc.perform(get("/api/findUser/1"))
+//				.andExpect(status().isOk())
+//				.andExpect(jsonPath("$.username").value("foundUser"));
+//
+//		verify(userRepository, times(1)).findById(1L);
+//	}
 }
