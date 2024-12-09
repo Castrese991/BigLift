@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,6 +96,23 @@ public class UserService
 		catch (Exception e)
 		{
 			throw new RuntimeException("Error updating user role", e);
+		}
+	}
+
+	@Transactional(readOnly = true)
+	public ResponseEntity<UserDTO> getUser(String username, String email) {
+		if (username == null || username.isEmpty() || email == null || email.isEmpty()) {
+			throw new IllegalArgumentException("Username ed email sono obbligatori");
+		}
+
+		try {
+			UserDTO dto = userRepository.getUserByUsernameEmail(username, email);
+			if (dto == null) {
+				return ResponseEntity.notFound().build();
+			}
+			return ResponseEntity.ok(dto);
+		} catch (Exception e) {
+			throw new RuntimeException("Errore durante la ricerca dell'utente", e);
 		}
 	}
 

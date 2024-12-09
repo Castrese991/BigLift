@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.big_lift.palestra.dto.UserDTO;
@@ -77,10 +78,11 @@ public class UserController {
 		return userService.updateUserRole(userDTO);
 	}
 
-	@GetMapping("/findUser/{id}")
-	@Operation(summary = "Modifica un utente", description = "Aggiorna un utente esistente")
-	public Optional<UserModel> findUser(@PathVariable Long id){return userRepository.findById(id);}
-
+	@GetMapping("/findUser/{username}")
+	@Operation(summary = "Trova un utente", description = "Trova un utente esistente in base a username ed email")
+	public ResponseEntity<UserDTO> findUser(@PathVariable String username, @RequestParam String email) {
+		return userService.getUser(username, email);
+	}
 	@ExceptionHandler(UserAlreadyExistsException.class)
 	public ResponseEntity<String> handleUserAlreadyExists(UserAlreadyExistsException ex) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
