@@ -2,13 +2,13 @@ package com.big_lift.palestra.model;
 
 import java.time.Instant;
 
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.big_lift.palestra.enums.Role;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -59,6 +59,7 @@ public class UserModel {
 	private Instant createdAt;
 
 	@LastModifiedDate
+	@Column(insertable = false)
 	private Instant updatedAt;
 
 }

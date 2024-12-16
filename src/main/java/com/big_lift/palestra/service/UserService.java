@@ -1,7 +1,5 @@
 package com.big_lift.palestra.service;
 
-
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;

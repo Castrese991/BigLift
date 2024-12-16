@@ -4,7 +4,6 @@ import java.time.Instant;
 
 import com.big_lift.palestra.enums.Role;
 import com.big_lift.palestra.view.Views;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.AllArgsConstructor;
