@@ -1,5 +1,6 @@
 package com.big_lift.palestra.config;
 
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,4 +18,5 @@ public class OpenApiConfig
 				.version("1.0")
 				.description("Documentazione dell'API per BigLift"));
 	}
+
 }

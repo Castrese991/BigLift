@@ -30,5 +30,7 @@ public class UserDTO {
 	private String email;
 	@JsonView(Views.Public.class)
 	private Instant createdAt;
+	@JsonView(Views.CreateView.class)
+	private String password;
 
 }

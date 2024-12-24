@@ -10,6 +10,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.big_lift.palestra.enums.Role;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
@@ -18,6 +20,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +30,10 @@ import lombok.Setter;
 
 
 @Entity
-@Table(name = "UserModel")
+@Table(name = "UserModel", uniqueConstraints = {
+		@UniqueConstraint(columnNames = {"username"}),
+		@UniqueConstraint(columnNames = {"email"})
+})
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

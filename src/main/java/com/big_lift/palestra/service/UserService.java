@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,20 +17,22 @@ import com.big_lift.palestra.dto.UserDTO;
 import com.big_lift.palestra.exception.UserAlreadyExistsException;
 import com.big_lift.palestra.model.UserModel;
 import com.big_lift.palestra.repository.UserRepository;
-import com.big_lift.palestra.utils.GenerateRandomPasswordUtils;
 
 
 @Service
 public class UserService
 {
-
 	private final UserRepository userRepository;
 
+	private final PasswordEncoder encoder;
+
 	@Autowired
-	public UserService(UserRepository userRepository)
+	public UserService(UserRepository userRepository, final PasswordEncoder encoder)
 	{
 		this.userRepository = userRepository;
+		this.encoder = encoder;
 	}
+
 
 	@Transactional(readOnly = true)
 	public Page<UserDTO> getAllUsers(Pageable pageable)
@@ -38,12 +44,9 @@ public class UserService
 	{
 		verifyUserToCreate(userDTO);
 
-		String generatedPassword = GenerateRandomPasswordUtils.generatePwd();
-		String hashedPassword = GenerateRandomPasswordUtils.generateHashedPassword(generatedPassword);
-
 		UserModel u = UserModel.builder()
 				.username(userDTO.getUsername())
-				.password(hashedPassword)
+				.password(encoder.encode(userDTO.getPassword()))
 				.email(userDTO.getEmail())
 				.role(userDTO.getRole())
 				.build();
@@ -55,6 +58,7 @@ public class UserService
 				.id(u.getId())
 				.email(u.getEmail())
 				.username(u.getUsername())
+				.password(u.getPassword())
 				.createdAt(u.getCreatedAt())
 				.role(u.getRole()).build();
 	}
@@ -125,6 +129,11 @@ public class UserService
 		{
 			throw new UserAlreadyExistsException("Email già in uso. Scegli un'altra email.");
 		}
+	}
+
+	public UserModel findUserByEmail(final String email)
+	{
+		return userRepository.findByEmail(email).get();
 	}
 
 }
