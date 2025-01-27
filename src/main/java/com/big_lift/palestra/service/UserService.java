@@ -102,13 +102,13 @@ public class UserService
 	}
 
 	@Transactional(readOnly = true)
-	public ResponseEntity<UserDTO> getUser(String username, String email) {
-		if (username == null || username.isEmpty() || email == null || email.isEmpty()) {
-			throw new IllegalArgumentException("Username ed email sono obbligatori");
+	public ResponseEntity<UserDTO> getUser(String username) {
+		if (username == null || username.isEmpty()) {
+			throw new IllegalArgumentException("Username obbligatoro");
 		}
 
 		try {
-			UserDTO dto = userRepository.getUserByUsernameEmail(username, email);
+			UserDTO dto = userRepository.getUserByUsernameEmail(username);
 			if (dto == null) {
 				return ResponseEntity.notFound().build();
 			}

@@ -5,6 +5,7 @@ import java.time.Instant;
 import com.big_lift.palestra.enums.Role;
 import com.big_lift.palestra.view.Views;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class UserDTO {
 	@JsonView(Views.Public.class)
 	@JsonIgnore
 	private Long id;
-	@JsonView({ Views.CreateView.class, Views.UpdateView.class })
+	@JsonView({ Views.CreateView.class, Views.UpdateView.class, Views.LoginView.class })
 	private String username;
 	@JsonView({ Views.CreateView.class, Views.UpdateView.class })
 	private Role role;
@@ -32,8 +33,8 @@ public class UserDTO {
 	private String email;
 	@JsonView(Views.Public.class)
 	private Instant createdAt;
-	@JsonView(Views.CreateView.class)
-	@JsonIgnore
+	@JsonView({Views.CreateView.class, Views.LoginView.class})
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 
 }

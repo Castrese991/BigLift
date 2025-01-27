@@ -21,8 +21,8 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
 	Optional<UserModel> findByEmail(String email);
 
 	@Query("SELECT new com.big_lift.palestra.dto.UserDTO(u.id, u.username, u.role, u.email, u.createdAt, u.password) " +
-			"FROM UserModel u WHERE u.username = :username AND u.email = :email")
-	UserDTO getUserByUsernameEmail(@Param("username") String username, @Param("email") String email);
+			"FROM UserModel u WHERE u.username = :username")
+	UserDTO getUserByUsernameEmail(@Param("username") String username);
 
 	//UserDTO assignTrainerToCustomer(@Param())
 }

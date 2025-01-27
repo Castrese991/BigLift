@@ -1,6 +1,5 @@
 package com.big_lift.palestra.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.big_lift.palestra.dto.JwtResponse;
 import com.big_lift.palestra.dto.TrainerDTO;
 import com.big_lift.palestra.dto.UserDTO;
 import com.big_lift.palestra.exception.UserAlreadyExistsException;
@@ -41,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/auth")
 @Slf4j
+@CrossOrigin(origins = "http://localhost:5000/")
 public class UserController {
 
 	private final UserService userService;
@@ -61,16 +64,16 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public String login(@RequestParam String username, @RequestParam String password) {
-		log.info(" sono nel UserController login method");
+	public String login(@JsonView(Views.LoginView.class) @RequestBody UserDTO userDTO) {
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(username, password));
+				new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		log.info("Token generato per l'utente: " + userDTO.getUsername());
+
 		return jwtUtil.generateToken(userDetails.getUsername());
 	}
-
 
 	@GetMapping("/users")
 	@Operation(summary = "Ottieni tutti gli utenti", description = "Restituisce una lista di tutti gli utenti presenti nel database")
@@ -108,8 +111,8 @@ public class UserController {
 
 	@GetMapping("/findUser/{username}")
 	@Operation(summary = "Trova un utente", description = "Trova un utente esistente in base a username ed email")
-	public ResponseEntity<UserDTO> findUser(@PathVariable String username, @RequestParam String email) {
-		return userService.getUser(username, email);
+	public ResponseEntity<UserDTO> findUser(@PathVariable String username) {
+		return userService.getUser(username);
 	}
 
 	@PatchMapping("/assignTrainer/{idTrainer}/{idCustomer}")
